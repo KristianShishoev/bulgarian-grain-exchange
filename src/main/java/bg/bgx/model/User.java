@@ -34,6 +34,17 @@ public class User extends AbstractEntity{
 	@NotNull
 	private byte[] salt;
 	
+	@NotNull
+	private String role;
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	public byte[] getSalt() {
 		return salt;
 	}

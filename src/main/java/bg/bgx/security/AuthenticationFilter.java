@@ -13,13 +13,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
 import bg.bgx.context.UserContext;
-
 import io.jsonwebtoken.Jwts;
 
 @Provider
-@JWTTokenNeeded
+@Security
 @Priority(Priorities.AUTHENTICATION)
-public class JWTTokenNeededFilter implements ContainerRequestFilter {
+public class AuthenticationFilter implements ContainerRequestFilter {
 	
 	@Inject
 	private UserContext userContext;
@@ -29,15 +28,13 @@ public class JWTTokenNeededFilter implements ContainerRequestFilter {
 
 		 	String loggedUserJWT = userContext.getUserJWTToken();
 		 
-	        if (loggedUserJWT == null || !loggedUserJWT.startsWith("Bearer ")) {
+	        if (loggedUserJWT == null) {
 	            throw new NotAuthorizedException("Authorization header must be provided");
 	        }
 
-	        String token = loggedUserJWT.substring("Bearer".length()).trim();
-
 	        try {
 	        	Key key = KeyGenerator.generateKey();
-	            Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+	            Jwts.parser().setSigningKey(key).parseClaimsJws(loggedUserJWT);
 	        } catch (Exception e) {
 	            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
 	        }

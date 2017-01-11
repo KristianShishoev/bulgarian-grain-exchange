@@ -6,6 +6,7 @@
   transaction-type="JTA">
   <jta-data-source>java:/bgxDS</jta-data-source>
   <class>bg.bgx.model.User</class>
+  <class>bg.bgx.model.News</class>
   <class>bg.bgx.model.AbstractEntity</class>
   <exclude-unlisted-classes>false</exclude-unlisted-classes>
 

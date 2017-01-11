@@ -21,11 +21,11 @@ public class UserService {
 	}
 
 	@Transactional
-	public User findByUserName(String username) {
+	public User findByUserName(String email) {
 
 		TypedQuery<User> query = entityManager
-				.createNamedQuery("findByUserName", User.class)
-				.setParameter("userName", username);
+				.createNamedQuery("findByEmail", User.class)
+				.setParameter("email", email);
 
 		User result = query.getResultList().size() > 0 ? query.getResultList().get(0)
 				: null;

@@ -2,6 +2,7 @@ package bg.bgx.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -24,7 +25,7 @@ public class User extends AbstractEntity{
 	
 	@NotNull
 	@Column(unique=true)
-	@Size(min=1, max=128)
+	@Size(min=1, max=64)
 	private String email;
 	
 	@NotNull
@@ -37,6 +38,49 @@ public class User extends AbstractEntity{
 	@NotNull
 	private String role;
 	
+	private String type;
+	
+	private String firstName;
+	
+	private String lastName;
+	
+	private String phone;
+	
+	@Lob
+	private byte[] avatar;
+	
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	public String getRole() {
 		return role;
 	}
@@ -76,5 +120,12 @@ public class User extends AbstractEntity{
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
+	public byte[] getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(byte[] avatar) {
+		this.avatar = avatar;
+	}
 }

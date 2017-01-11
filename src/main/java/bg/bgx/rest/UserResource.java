@@ -55,8 +55,8 @@ public class UserResource {
 	public Response authenticateUser() {
 
 		try {
-			User user = authenticate("username", "password");
-			String token = getToken("username", "ADMIN");
+			User user = authenticate("email", "password");
+			String token = getToken("email", "ADMIN");
 			userContext.setUserJWTToken(token);
 
 			return Response.ok().build();
@@ -68,12 +68,12 @@ public class UserResource {
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response authenticateUser(@FormParam("login") String login,
+	public Response authenticateUser(@FormParam("email") String email,
 			@FormParam("password") String password) {
 
 		try {
-			User user = authenticate(login, password);
-			String token = getToken(login, user.getRole());
+			User user = authenticate(email, password);
+			String token = getToken(email, user.getRole());
 			userContext.setUserJWTToken(token);
 
 			return Response.ok().build();

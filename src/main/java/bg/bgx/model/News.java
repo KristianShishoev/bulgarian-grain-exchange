@@ -2,9 +2,11 @@ package bg.bgx.model;
 
 import java.util.Map;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.FetchType;
+import javax.persistence.MapKeyColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -17,7 +19,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "findByAuthor", query = "SELECT n FROM News n WHERE n.author = :author"),
     @NamedQuery(name = "findByTitle", query = "SELECT n From News n WHERE n.title LIKE :phrase"),
-    @NamedQuery(name = "findByCategory", query = "Select n From News n WHERE n.category = :category")
+    @NamedQuery(name = "findNews", query = "SELECT n FROM News n WHERE n.title = :title"),
+    @NamedQuery(name = "findByCategory", query = "Select n From News n WHERE n.category = :category"),
+    @NamedQuery(name = "findAll", query = "Select n From News n")
 })
 public class News extends AbstractEntity{
 	
@@ -27,22 +31,23 @@ public class News extends AbstractEntity{
 	@NotNull
 	private Category category;
 	
-	@ManyToOne
-	private User author;
+	private String author;
 	
 	private int views;
 	
 	@NotNull
 	private String content;
 	
-	@ElementCollection
+    @ElementCollection(fetch=FetchType.EAGER)
+    @CollectionTable(name = "news_images")
+    @MapKeyColumn(name = "id")
 	private Map<String, String> images;
 	
 	public News(){
 		
 	}
 	
-	public News(String title, Category category, User author, int views,
+	public News(String title, Category category, String author, int views,
 			String content, Map<String, String> images) {
 		super();
 		this.title = title;
@@ -69,11 +74,11 @@ public class News extends AbstractEntity{
 		this.category = category;
 	}
 
-	public User getAuthor() {
+	public String getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(User author) {
+	public void setAuthor(String author) {
 		this.author = author;
 	}
 

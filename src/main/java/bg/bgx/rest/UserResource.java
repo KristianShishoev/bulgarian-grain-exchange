@@ -33,7 +33,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class UserResource {
 
 	@Inject
-	private UserService userDao;
+	private UserService userService;
 
 	@Inject
 	private UserContext userContext;
@@ -98,7 +98,7 @@ public class UserResource {
 		byte[] salt = Encrypt.getSalt();
 		user.setPassword(Encrypt.encryptSHA256(user.getPassword(), salt));
 		user.setSalt(salt);
-		userDao.addUser(user);
+		userService.addUser(user);
 
 		String token = getToken(user.getUserName(), user.getRole());
 		userContext.setUserJWTToken(token);
@@ -122,7 +122,7 @@ public class UserResource {
 
 	private User authenticate(String login, String password) {
 
-		User findedUser = userDao.findByUserName(login);
+		User findedUser = userService.findByUserName(login);
 
 		if (findedUser == null) {
 			throw new SecurityException("Invalid user/password");

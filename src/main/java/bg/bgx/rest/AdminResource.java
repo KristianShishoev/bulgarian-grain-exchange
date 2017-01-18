@@ -14,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.log4j.Logger;
+
 import bg.bgx.model.News;
 import bg.bgx.news.NewsService;
 
@@ -24,6 +26,9 @@ public class AdminResource {
 	
 	@Inject
 	private NewsService newsService;
+	
+	@Inject
+	private transient Logger logger;
 	
 	@POST
 	@Path("/insertNews")
@@ -58,11 +63,12 @@ public class AdminResource {
 		
 		News news = newsService.findNews(title);
 		if(news == null){
+			logger.error("Cannot find news with title: " + title);
 			return Response.status(Status.BAD_REQUEST).build();
 		}
 		
 		newsService.removeNews(news);
+		logger.info("News with title: " + title + " have been removed.");
 		return Response.status(Status.NO_CONTENT).build();
 	}
-
 }

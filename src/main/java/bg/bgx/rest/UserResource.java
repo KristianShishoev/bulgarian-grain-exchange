@@ -12,10 +12,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import bg.bgx.context.UserContext;
@@ -24,6 +27,7 @@ import bg.bgx.model.User;
 import bg.bgx.security.Encrypt;
 import bg.bgx.security.KeyGenerator;
 import bg.bgx.security.Security;
+import bg.bgx.user.ResetPasswordService;
 import bg.bgx.user.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -37,6 +41,9 @@ public class UserResource {
 
 	@Inject
 	private UserContext userContext;
+	
+	@Inject
+	private ResetPasswordService resetPasswordService;
 
 	@Context
 	private UriInfo uriInfo;
@@ -105,6 +112,19 @@ public class UserResource {
 
 		return Response.status(Response.Status.OK).build();
 	}
+	
+	@PUT
+	@Path("/resetpassword/{email}")
+	public Response resetPassword(@PathParam("email") String email) throws NoSuchAlgorithmException{
+		
+		User user = userService.findByEmail(email);
+		if(user == null){
+			Response.status(Status.BAD_REQUEST).build();
+		}
+		
+		resetPasswordService.resetPassword(user);
+		return Response.ok().build();
+	}
 
 	private String getToken(String login, String role) {
 
@@ -122,7 +142,7 @@ public class UserResource {
 
 	private User authenticate(String login, String password) {
 
-		User findedUser = userService.findByUserName(login);
+		User findedUser = userService.findByEmail(login);
 
 		if (findedUser == null) {
 			throw new SecurityException("Invalid user/password");

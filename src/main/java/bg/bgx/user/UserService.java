@@ -21,7 +21,7 @@ public class UserService {
 	}
 
 	@Transactional
-	public User findByUserName(String email) {
+	public User findByEmail(String email) {
 
 		TypedQuery<User> query = entityManager
 				.createNamedQuery("findByEmail", User.class)
@@ -32,5 +32,4 @@ public class UserService {
 
 		return result;
 	}
-
 }

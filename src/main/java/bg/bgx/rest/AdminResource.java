@@ -14,7 +14,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.Logger;
 
 import bg.bgx.model.News;
@@ -30,15 +29,6 @@ public class AdminResource {
 	
 	@Inject
 	private transient Logger logger;
-	
-	@GET
-	@Path("/")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String test()
-	{
-		String newPassword = RandomStringUtils.random(12, true, true);
-		return newPassword;
-	}
 	
 	@POST
 	@Path("/insertNews")

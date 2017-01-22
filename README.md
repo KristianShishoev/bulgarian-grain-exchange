@@ -26,3 +26,5 @@ The following instructions are for running application on Windows, Wildfly appli
 
 10. To debug application you need to start wildfly with command: standalone.bat --debug --server-config=standalone.xml and then connect eclipse
 debugger on 8787 port as remote java application.
+
+11. To setup mail api on wildfly follow following tutorial (for testing purposes gmail it is used): http://khozzy.blogspot.bg/2013/10/how-to-send-mails-from-jboss-wildfly.html 

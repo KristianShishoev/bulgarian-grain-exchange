@@ -14,7 +14,7 @@ import bg.bgx.model.News;
 @RequestScoped
 public class NewsService {
 	
-	@PersistenceContext(unitName = "bulgarian-grain-exchange")
+	@PersistenceContext(unitName = "persistenceUnit")
 	private EntityManager entityManager;
 	
 	@Transactional

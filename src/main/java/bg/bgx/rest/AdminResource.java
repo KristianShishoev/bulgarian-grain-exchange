@@ -1,5 +1,7 @@
 package bg.bgx.rest;
 
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -17,7 +19,9 @@ import javax.ws.rs.core.Response.Status;
 import org.apache.log4j.Logger;
 
 import bg.bgx.model.News;
+import bg.bgx.model.User;
 import bg.bgx.news.NewsService;
+import bg.bgx.user.UserService;
 
 @Path("/admin")
 @RequestScoped
@@ -26,6 +30,9 @@ public class AdminResource {
 	
 	@Inject
 	private NewsService newsService;
+	
+	@Inject
+	private UserService userService;
 	
 	@Inject
 	private transient Logger logger;
@@ -70,5 +77,13 @@ public class AdminResource {
 		newsService.removeNews(news);
 		logger.info("News with title: " + title + " have been removed.");
 		return Response.status(Status.NO_CONTENT).build();
+	}
+	
+	@GET
+	@Path("/findAllUsers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findAllUsers(){
+		List<User> users = userService.findAllUsers();
+		return Response.ok().entity(users).build();
 	}
 }

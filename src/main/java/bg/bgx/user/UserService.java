@@ -1,17 +1,20 @@
 package bg.bgx.user;
 
+import java.util.List;
+
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
+import bg.bgx.model.News;
 import bg.bgx.model.User;
 
 @RequestScoped
 public class UserService {
 
-	@PersistenceContext(unitName = "bulgarian-grain-exchange")
+	@PersistenceContext(unitName = "persistenceUnit")
 	private EntityManager entityManager;
 
 	@Transactional
@@ -31,5 +34,13 @@ public class UserService {
 				: null;
 
 		return result;
+	}
+	
+	@Transactional
+	public List<User> findAllUsers() {
+
+		TypedQuery<User> query = entityManager
+				.createNamedQuery("findAllUsers", User.class);
+		return query.getResultList();
 	}
 }

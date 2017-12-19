@@ -18,7 +18,7 @@ import bg.bgx.security.Encrypt;
 @RequestScoped
 public class ResetPasswordService {
 	
-	@PersistenceContext(unitName = "bulgarian-grain-exchange")
+	@PersistenceContext(unitName = "persistenceUnit")
 	private EntityManager entityManager;
 	
 	@Inject

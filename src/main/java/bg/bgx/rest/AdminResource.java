@@ -1,7 +1,6 @@
 package bg.bgx.rest;
 
 import java.util.List;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -15,17 +14,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
 import org.apache.log4j.Logger;
-
 import bg.bgx.model.News;
 import bg.bgx.model.User;
 import bg.bgx.news.NewsService;
+import bg.bgx.security.Security;
 import bg.bgx.user.UserService;
+import bg.bgx.model.Role;
 
 @Path("/admin")
 @RequestScoped
-//@Security({Role.ADMIN})
+@Security({Role.ADMIN})
 public class AdminResource {
 	
 	@Inject

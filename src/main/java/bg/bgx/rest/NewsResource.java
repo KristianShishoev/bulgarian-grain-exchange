@@ -13,7 +13,9 @@ import javax.ws.rs.core.Response;
 
 import bg.bgx.model.Category;
 import bg.bgx.model.News;
+import bg.bgx.model.Role;
 import bg.bgx.news.NewsService;
+import bg.bgx.security.Security;
 
 @RequestScoped
 @Path("/news")
@@ -25,6 +27,7 @@ public class NewsResource {
 	@GET
 	@Path("/findAll")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Security({Role.TRADER, Role.ADMIN})
 	public Response getNews() {
 
 		List<News> result = newsService.findAllNews();
@@ -34,6 +37,7 @@ public class NewsResource {
 	@GET
 	@Path("/findByAuthor/{author}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Security({Role.TRADER, Role.ADMIN})
 	public Response findByAuthor(@PathParam("author") String author){
 		
 		List<News> result = newsService.findByAuthor(author);
@@ -43,6 +47,7 @@ public class NewsResource {
 	@GET
 	@Path("/findByCategory/{category}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Security({Role.TRADER, Role.ADMIN})
 	public Response findByCategory(@PathParam("category") Category category){
 		
 		List<News> result = newsService.findByCategory(category);
@@ -52,6 +57,7 @@ public class NewsResource {
 	@GET
 	@Path("/findByTitle/{title}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@Security({Role.TRADER, Role.ADMIN})
 	public Response findByTitle(@PathParam("title") String title){
 		
 		List<News> result = newsService.findByTitle(title);

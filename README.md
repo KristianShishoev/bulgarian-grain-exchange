@@ -1,6 +1,6 @@
 # bulgarian-grain-exchange
 
-A JavaEE website, that makes available users to buy and sell grain also offers useful information about grain prices.
+A JavaEE backend application, that makes available users to buy and sell grain also offers useful information about grain prices.
 
 # Running application
 

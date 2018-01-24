@@ -28,3 +28,13 @@ The following instructions are for running application on Windows, Wildfly appli
 debugger on 8787 port as remote java application.
 
 11. To setup mail api on wildfly follow following tutorial (for testing purposes gmail it is used): http://khozzy.blogspot.bg/2013/10/how-to-send-mails-from-jboss-wildfly.html 
+
+# Running tests
+
+Running arquillian integration tests:
+
+1. Download WildFly 10.1.0 version java application server
+
+2. Point downloaded directory in arquillian.xml which is located in **/src/test/resources**
+
+3. Execute **mvn clean test -Parq-wildfly-managed** in cmd to execute tests

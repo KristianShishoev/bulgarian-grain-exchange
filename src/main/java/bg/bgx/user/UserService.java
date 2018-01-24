@@ -8,7 +8,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-import bg.bgx.model.News;
 import bg.bgx.model.User;
 
 @RequestScoped

@@ -1,16 +1,33 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>bg.bgx</groupId>
-  <artifactId>bulgarian-grain-exchange</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
-  
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+ <groupId>bg.bgx</groupId>
+ <artifactId>bulgarian-grain-exchange</artifactId>
+ <version>0.0.1-SNAPSHOT</version>
+ <packaging>war</packaging>
+
+ <properties>
   <failOnMissingWebXml>false</failOnMissingWebXml>
   <maven.compiler.source>1.8</maven.compiler.source>
   <maven.compiler.target>1.8</maven.compiler.target>
+  <version.jboss.bom>10.1.0.Final</version.jboss.bom>
+  <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
  </properties>
  
+ 
+<dependencyManagement>
+  <dependencies>
+
+   <dependency>
+    <groupId>org.wildfly.bom</groupId>
+    <artifactId>wildfly-javaee7-with-tools</artifactId>
+    <version>${version.jboss.bom}</version>
+    <type>pom</type>
+    <scope>import</scope>
+   </dependency>
+  </dependencies>
+ </dependencyManagement>
+
  <dependencies>
 
   <dependency>
@@ -19,37 +36,60 @@
    <version>7.0</version>
    <scope>provided</scope>
   </dependency>
-  
+
   <dependency>
    <groupId>io.jsonwebtoken</groupId>
    <artifactId>jjwt</artifactId>
    <version>0.6.0</version>
   </dependency>
-  
+
   <dependency>
-    <groupId>log4j</groupId>
-    <artifactId>log4j</artifactId>
-    <version>1.2.17</version>
+   <groupId>log4j</groupId>
+   <artifactId>log4j</artifactId>
+   <version>1.2.17</version>
   </dependency>
+
+  <dependency>
+   <groupId>org.apache.commons</groupId>
+   <artifactId>commons-lang3</artifactId>
+   <version>3.4</version>
+  </dependency>
+
+
+  <!-- <dependency> <groupId>mysql</groupId> <artifactId>mysql-connector-java</artifactId> 
+   <version>5.1.40</version> </dependency> -->
+   
+		<dependency>
+			<groupId>org.jboss.spec.javax.annotation</groupId>
+			<artifactId>jboss-annotations-api_1.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+  
   
 <dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-lang3</artifactId>
-    <version>3.4</version>
+    <groupId>org.jboss.shrinkwrap.resolver</groupId>
+    <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+    <scope>test</scope>
 </dependency>
-  
-  
-<!-- <dependency>
-    <groupId>mysql</groupId>
-    <artifactId>mysql-connector-java</artifactId>
-    <version>5.1.40</version>
+   
+
+<!-- https://mvnrepository.com/artifact/junit/junit -->
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.12</version>
+    <scope>test</scope>
 </dependency>
- -->
- 
+
   <dependency>
-   <groupId>junit</groupId>
-   <artifactId>junit</artifactId>
-   <version>4.8.1</version>
+   <groupId>org.jboss.arquillian.junit</groupId>
+   <artifactId>arquillian-junit-container</artifactId>
+   <scope>test</scope>
+  </dependency>
+
+  <dependency>
+   <groupId>org.jboss.arquillian.protocol</groupId>
+   <artifactId>arquillian-protocol-servlet</artifactId>
    <scope>test</scope>
   </dependency>
 
@@ -61,19 +101,51 @@
   </dependency>
 
  </dependencies>
- 
+
  <build>
-        <finalName>bulgarian-grain-exchange</finalName>
-        <plugins>
-            <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                  <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
-            </plugin>
-        </plugins>
-        
+  <finalName>bulgarian-grain-exchange</finalName>
+  <plugins>
+   <plugin>
+    <artifactId>maven-war-plugin</artifactId>
+    <version>3.0.0</version>
+    <configuration>
+     <failOnMissingWebXml>false</failOnMissingWebXml>
+    </configuration>
+   </plugin>
+   
+   <plugin>
+    <groupId>org.wildfly.plugins</groupId>
+    <artifactId>wildfly-maven-plugin</artifactId>
+    <version>${version.wildfly.maven.plugin}</version>
+   </plugin>
+  </plugins>
+
  </build>
-  
+ <profiles>
+
+  <profile>
+   <!-- Run with: mvn clean test -Parq-wildfly-managed -->
+   <id>arq-wildfly-managed</id>
+   <dependencies>
+    <dependency>
+     <groupId>org.wildfly.arquillian</groupId>
+     <artifactId>wildfly-arquillian-container-managed</artifactId>
+     <scope>test</scope>
+    </dependency>
+   </dependencies>
+  </profile>
+
+<!--   <profile>
+   Run with: mvn clean test -Parq-wildfly-remote
+   <id>arq-wildfly-remote</id>
+   <dependencies>
+    <dependency>
+     <groupId>org.wildfly.arquillian</groupId>
+     <artifactId>wildfly-arquillian-container-remote</artifactId>
+     <scope>test</scope>
+    </dependency>
+   </dependencies>
+  </profile> -->
+
+ </profiles>
 </project>

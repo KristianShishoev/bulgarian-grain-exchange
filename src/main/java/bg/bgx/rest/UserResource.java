@@ -41,7 +41,7 @@ public class UserResource {
 
 	@Inject
 	private UserContext userContext;
-	
+
 	@Inject
 	private ResetPasswordService resetPasswordService;
 
@@ -49,28 +49,28 @@ public class UserResource {
 	private UriInfo uriInfo;
 
 	// test purposes
-//	@GET
-//	@Security({Role.ADMIN})
-//	@Path("/sec")
-//	public String getSec() {
-//		return "Security";
-//	}
+	// @GET
+	// @Security({Role.ADMIN})
+	// @Path("/sec")
+	// public String getSec() {
+	// return "Security";
+	// }
 
 	// test purposes
-//	@POST
-//	@Path("/log")
-//	public Response authenticateUser() {
-//
-//		try {
-//			User user = authenticate("email", "password");
-//			String token = getToken("email", "ADMIN");
-//			userContext.setUserJWTToken(token);
-//
-//			return Response.ok().build();
-//		} catch (Exception e) {
-//			return Response.status(Response.Status.UNAUTHORIZED).build();
-//		}
-//	}
+	// @POST
+	// @Path("/log")
+	// public Response authenticateUser() {
+	//
+	// try {
+	// User user = authenticate("email", "password");
+	// String token = getToken("email", "ADMIN");
+	// userContext.setUserJWTToken(token);
+	//
+	// return Response.ok().build();
+	// } catch (Exception e) {
+	// return Response.status(Response.Status.UNAUTHORIZED).build();
+	// }
+	// }
 
 	@POST
 	@Path("/login")
@@ -84,7 +84,8 @@ public class UserResource {
 			String token = getToken(email, user.getRole());
 			userContext.setUserJWTToken(token);
 
-			return Response.ok().header("Authorization", "Bearer " + token).build();
+			return Response.ok().header("Authorization", "Bearer " + token)
+					.build();
 		} catch (Exception e) {
 			return Response.status(Response.Status.UNAUTHORIZED).build();
 		}
@@ -113,16 +114,17 @@ public class UserResource {
 
 		return Response.status(Response.Status.OK).build();
 	}
-	
+
 	@PUT
 	@Path("/resetpassword/{email}")
-	public Response resetPassword(@PathParam("email") String email) throws NoSuchAlgorithmException{
-		
+	public Response resetPassword(@PathParam("email") String email)
+			throws NoSuchAlgorithmException {
+
 		User user = userService.findByEmail(email);
-		if(user == null){
+		if (user == null) {
 			Response.status(Status.BAD_REQUEST).build();
 		}
-		
+
 		resetPasswordService.resetPassword(user);
 		return Response.ok().build();
 	}
@@ -132,17 +134,16 @@ public class UserResource {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("role", role);
 		claims.put("user", login);
-		
+
 		Date currentDate = new Date();
 		Date newDate = DateUtils.addMinutes(currentDate, 60);
-		
 
 		Key key = KeyGenerator.generateKey();
 		String jwtToken = Jwts.builder()
 				.setIssuer(uriInfo.getAbsolutePath().toString())
 				.setIssuedAt(new Date()).setClaims(claims)
-				.setExpiration(newDate)
-				.signWith(SignatureAlgorithm.HS512, key).compact();
+				.setExpiration(newDate).signWith(SignatureAlgorithm.HS512, key)
+				.compact();
 		return jwtToken;
 	}
 

@@ -66,13 +66,15 @@ public class NewsService {
 	public News findNews(String title){
 		
 		TypedQuery<News> query = entityManager.createNamedQuery("findNews", News.class).setParameter("title", title);
+		if(query.getResultList().isEmpty()){
+			return null;
+		}
 		return query.getResultList().get(0);
 	}
 	
 	@Transactional
-	public void updateNews(News news){
-		
-		entityManager.merge(news);
+	public News updateNews(News news){
+		return entityManager.merge(news);
 	}
 	
 	@Transactional

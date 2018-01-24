@@ -36,6 +36,14 @@ public class AdminResource {
 	@Inject
 	private transient Logger logger;
 	
+	@GET
+	@Path("/findAllNews")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findAllNews(){
+		List<News> news = newsService.findAllNews();
+		return Response.ok().entity(news).build();
+	}
+	
 	@POST
 	@Path("/insertNews")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -59,8 +67,8 @@ public class AdminResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateNews(News news){
 		
-		newsService.updateNews(news);
-		return Response.ok().build();
+		News updatedNews = newsService.updateNews(news);
+		return Response.ok().entity(updatedNews).build();
 	}
 	
 	@DELETE

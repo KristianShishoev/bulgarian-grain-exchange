@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -36,22 +37,19 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 	@Override
 	public void filter(ContainerRequestContext requestContext)
 			throws IOException {
-
+		
 		Class<?> resourceClass = resourceInfo.getResourceClass();
 		List<Role> classRoles = extractRoles(resourceClass);
 		Method resourceMethod = resourceInfo.getResourceMethod();
 		List<Role> methodRoles = extractRoles(resourceMethod);
 		
 		try {
-
 			if (methodRoles.isEmpty()) {
 				checkPermissions(classRoles);
 			} else {
 				checkPermissions(methodRoles);
 			}
-
-		} catch (Exception e) {
-
+		} catch (ForbiddenException e) {
 			requestContext.abortWith(
 					Response.status(Response.Status.FORBIDDEN).build());
 		}
@@ -69,17 +67,12 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 		if (secured == null) {
 			return new ArrayList<Role>();
 		} else {
-			
 			Role[] allowedRoles = secured.value();
 			return Arrays.asList(allowedRoles);
 		}
 	}
 
-	private void checkPermissions(List<Role> allowedRoles) {
-
-		if (allowedRoles.isEmpty()) {
-			return;
-		}
+	private void checkPermissions(List<Role> allowedRoles) throws ForbiddenException {
 
 		String loggedUserJWT = userContext.getUserJWTToken();
 		Claims claims = Jwts.parser().setSigningKey(KeyGenerator.generateKey())
@@ -92,6 +85,6 @@ public class AuthorizationFilter implements ContainerRequestFilter {
 			}
 		}
 		
-		throw new RuntimeException("forbidden");
+		throw new ForbiddenException();
 	}
 }

@@ -4,7 +4,6 @@ import java.io.File;
 import java.security.NoSuchAlgorithmException;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.UriInfo;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -31,7 +30,7 @@ public class UserResourceTest {
 
 	@Inject
 	private UserResource userResource;
-	
+
 	@Inject
 	private UserService userService;
 
@@ -46,10 +45,8 @@ public class UserResourceTest {
 				.asFile();
 
 		return ShrinkWrap.create(WebArchive.class, "test.war")
-				.addClass(UserResource.class).addClass(UriInfo.class)
-				.addPackage(User.class.getPackage())
-				.addPackage(UserService.class.getPackage())
-				.addPackage(Encrypt.class.getPackage())
+				.addClass(UserResource.class).addPackage(User.class.getPackage())
+				.addPackage(UserService.class.getPackage()).addPackage(Encrypt.class.getPackage())
 				.addClass(UserContext.class).addClass(LoggerProducer.class)
 				.addClass(MailService.class).addAsLibraries(files)
 				.addAsResource("META-INF/persistence.xml")
@@ -58,12 +55,12 @@ public class UserResourceTest {
 
 	@Before
 	public void setUp() throws NoSuchAlgorithmException {
-		
+
 		User findByEmail = userService.findByEmail("email@fake.com");
-		if(findByEmail != null){
+		if (findByEmail != null) {
 			return;
 		}
-		
+
 		User user = new User();
 		user.setUserName("username");
 		user.setEmail("email@fake.com");

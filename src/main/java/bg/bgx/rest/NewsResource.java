@@ -27,7 +27,7 @@ public class NewsResource {
 	@GET
 	@Path("/findAll")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Security({Role.TRADER, Role.ADMIN})
+	@Security({Role.ADMIN})
 	public Response getNews() {
 
 		List<News> result = newsService.findAllNews();

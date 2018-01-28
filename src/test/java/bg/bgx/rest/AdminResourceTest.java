@@ -5,7 +5,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -105,12 +104,13 @@ public class AdminResourceTest {
 	}
 
 	@Test
+	@SuppressWarnings("unchecked")
 	public void testRemoveNews(){
 		List<News> entities = (List<News>) adminResource.findAllNews().getEntity();
 		Assert.assertEquals(2, entities.size());
-		Response removeNews = adminResource.removeNews("testTitle");
+		adminResource.removeNews("testTitle");
 		List<News> removedNews = (List<News>) adminResource.findAllNews().getEntity();
-		Assert.assertEquals("News must not exists and should be null" ,1 , removedNews.size());
+		Assert.assertEquals("Only one news must exist", 1, removedNews.size());
 	}
 	
 	@After

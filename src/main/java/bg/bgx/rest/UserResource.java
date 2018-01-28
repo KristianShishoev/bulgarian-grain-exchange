@@ -15,11 +15,9 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.lang3.time.DateUtils;
 
@@ -44,33 +42,6 @@ public class UserResource {
 
 	@Inject
 	private ResetPasswordService resetPasswordService;
-
-	@Context
-	private UriInfo uriInfo;
-
-	// test purposes
-	// @GET
-	// @Security({Role.ADMIN})
-	// @Path("/sec")
-	// public String getSec() {
-	// return "Security";
-	// }
-
-	// test purposes
-	// @POST
-	// @Path("/log")
-	// public Response authenticateUser() {
-	//
-	// try {
-	// User user = authenticate("email", "password");
-	// String token = getToken("email", "ADMIN");
-	// userContext.setUserJWTToken(token);
-	//
-	// return Response.ok().build();
-	// } catch (Exception e) {
-	// return Response.status(Response.Status.UNAUTHORIZED).build();
-	// }
-	// }
 
 	@POST
 	@Path("/login")
@@ -139,9 +110,7 @@ public class UserResource {
 		Date newDate = DateUtils.addMinutes(currentDate, 60);
 
 		Key key = KeyGenerator.generateKey();
-		String jwtToken = Jwts.builder()
-				.setIssuer(uriInfo.getAbsolutePath().toString())
-				.setIssuedAt(new Date()).setClaims(claims)
+		String jwtToken = Jwts.builder().setIssuedAt(new Date()).setClaims(claims)
 				.setExpiration(newDate).signWith(SignatureAlgorithm.HS512, key)
 				.compact();
 		return jwtToken;
